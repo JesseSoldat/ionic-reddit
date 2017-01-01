@@ -13,18 +13,34 @@ export class RedditsPage {
 	limit: any;
 
 	constructor(public navCtrl: NavController, private redditService: RedditService){
-		
+		this.getDefaults()
 	}
 
 	ngOnInit(){
-		this.getPosts('anime', 15);
+		this.getPosts(this.category, this.limit);
+
+	}
+
+	getDefaults(){
+		if(localStorage.getItem('category') != null){
+			this.category = localStorage.getItem('category');
+		} else {
+			this.category = 'art';
+		}
+
+		if(localStorage.getItem('limit') != null){
+			this.limit = localStorage.getItem('limit');
+		} else {
+			this.limit = 10;
+		}
+		
 	}
 
 	getPosts(category, limit){
 		this.redditService.getPosts(category, limit).subscribe(response => {
 			this.items = response.data.children;
 
-			console.log(this.items)
+			// console.log(this.items)
 		});
 	}
 
@@ -32,5 +48,9 @@ export class RedditsPage {
 		this.navCtrl.push(DetailsPage, {
 			item: item
 		});
+	}
+
+	changeCategory(){
+		this.getPosts(this.category, this.limit);
 	}
 }
