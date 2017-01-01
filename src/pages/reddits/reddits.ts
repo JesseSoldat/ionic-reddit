@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { RedditService } from '../../app/services/reddits.service';
-
+import { DetailsPage } from '../details/details';
 
 @Component({
 	selector: 'reddits',
 	templateUrl: 'reddits.html'
 })
 export class RedditsPage {
-
 	items: any;
 	category: any;
 	limit: any;
@@ -18,13 +17,20 @@ export class RedditsPage {
 	}
 
 	ngOnInit(){
-		this.getPosts('food', 5);
+		this.getPosts('anime', 15);
 	}
 
 	getPosts(category, limit){
 		this.redditService.getPosts(category, limit).subscribe(response => {
 			this.items = response.data.children;
+
 			console.log(this.items)
-		})
+		});
+	}
+
+	viewItem(item){
+		this.navCtrl.push(DetailsPage, {
+			item: item
+		});
 	}
 }
